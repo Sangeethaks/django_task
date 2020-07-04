@@ -52,4 +52,51 @@ Start the Django server:
 $ python manage.py runserver
 ```
 
+Launch the localhost in any web browser, (http://127.0.0.1:8000/)
+And we will be able to see the below results,
+```python
+GET /
 
+HTTP 200 OK
+Allow: GET, HEAD, OPTIONS
+Content-Type: application/vnd.api+json
+Vary: Accept
+
+{
+    "data": {
+        "user": "http://127.0.0.1:8000/user/",
+        "activityperiod": "http://127.0.0.1:8000/activityperiod/"
+    }
+}
+```
+## Models:
+```
+"user": "http://127.0.0.1:8000/user/",
+"activityperiod": "http://127.0.0.1:8000/activityperiod/"
+```
+The data from the json file will get displayed in the above server links.
+Apart from that, I have designed the script in such a way that we can populate random data using REST API.
+
+
+## urls.py
+
+In the *"django_task/urls.py"* , I have added the following, 
+```python
+from django.urls import include, path
+from rest_framework import routers
+from myapi import views
+
+router = routers.DefaultRouter()
+router.register(r'user', views.UserViewSet)
+router.register(r'activityperiod', views.ActivityPeriodViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+]
+```
+This will hook up all necessary URLs for the USER and ACTIVITYPERIOD models.
+```
+GET /user/ — lists all the users          -----  Ex: "http://127.0.0.1:8000/user/"
+GET /user/:id — gets one user             -----  Ex: "http://127.0.0.1:8000/user/123"
+DELETE /user/:id — deletes a user  
+```
